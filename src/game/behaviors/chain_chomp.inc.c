@@ -522,6 +522,27 @@ void bhv_wooden_post_update(void) {
 }
 
 /**
+ * Update function for wooden sign, with the code copied from above.
+ */
+void bhv_wooden_sign_update(void) {
+    // When ground pounded by mario, drop by -45 + -20
+    if (!o->oWoodenPostMarioPounding) {
+        if ((o->oWoodenPostMarioPounding = cur_obj_is_mario_ground_pounding_platform())) {
+            cur_obj_play_sound_2(SOUND_GENERAL_POUND_WOOD_POST);
+            o->oWoodenPostSpeedY = -65.0f;
+        }
+    } else if (approach_f32_ptr(&o->oWoodenPostSpeedY, 0.0f, 25.0f)) {
+        // Stay still until mario is done ground pounding
+        o->oWoodenPostMarioPounding = cur_obj_is_mario_ground_pounding_platform();
+    } else if ((o->oWoodenPostOffsetY += o->oWoodenPostSpeedY) < -100.0f) {
+        o->oWoodenPostOffsetY = -100.0f;
+    }
+    if (o->oWoodenPostOffsetY != 0.0f) {
+        o->oPosY = o->oHomeY + o->oWoodenPostOffsetY;
+    }
+}
+
+/**
  * Init function for chain chomp gate.
  */
 void bhv_chain_chomp_gate_init(void) {
