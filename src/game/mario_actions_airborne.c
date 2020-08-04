@@ -917,7 +917,12 @@ s32 act_ground_pound(struct MarioState *m) {
 
     play_sound_if_no_flag(m, SOUND_ACTION_THROW, MARIO_ACTION_SOUND_PLAYED);
 
-    if (m->actionState == 0) {
+    if (m->input & INPUT_B_PRESSED) {
+        m->vel[1] = 0x10;
+        mario_set_forward_vel(m, 0x010);
+        set_mario_action(m, ACT_DIVE, 0);
+        return TRUE;
+    } else if (m->actionState == 0) {
         if (m->actionTimer < 10) {
             yOffset = 20 - 2 * m->actionTimer;
             if (m->pos[1] + yOffset + 160.0f < m->ceilHeight) {
