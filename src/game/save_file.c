@@ -366,6 +366,8 @@ void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
     sUnusedGotGlobalCoinHiScore = 0;
     gGotFileCoinHiScore = FALSE;
 
+    save_file_set_total_coin_count(fileIndex, gMarioState->numCoins);
+
     if (courseIndex >= 0 && courseIndex < COURSE_STAGES_COUNT) {
         //! Compares the coin score as a 16 bit value, but only writes the 8 bit
         // truncation. This can allow a high score to decrease.
@@ -463,6 +465,14 @@ s32 save_file_get_total_star_count(s32 fileIndex, s32 minCourse, s32 maxCourse) 
     return save_file_get_course_star_count(fileIndex, -1) + count;
 }
 
+s32 save_file_get_total_coin_count(s32 fileIndex) {
+    return gSaveBuffer.files[fileIndex][0].totalCoins;
+}
+
+void save_file_set_total_coin_count(s32 fileIndex, s32 coinCount) {
+    gSaveBuffer.files[fileIndex][0].totalCoins = coinCount;
+}
+
 void save_file_set_flags(u32 flags) {
     gSaveBuffer.files[gCurrSaveFileNum - 1][0].flags |= (flags | SAVE_FLAG_FILE_EXISTS);
     gSaveFileModified = TRUE;
@@ -537,7 +547,7 @@ void save_file_set_cap_pos(s16 x, s16 y, s16 z) {
 
     saveFile->capLevel = gCurrLevelNum;
     saveFile->capArea = gCurrAreaIndex;
-    vec3s_set(saveFile->capPos, x, y, z);
+    //vec3s_set(saveFile->capPos, x, y, z);
     save_file_set_flags(SAVE_FLAG_CAP_ON_GROUND);
 }
 
@@ -547,7 +557,8 @@ s32 save_file_get_cap_pos(Vec3s capPos) {
 
     if (saveFile->capLevel == gCurrLevelNum && saveFile->capArea == gCurrAreaIndex
         && (flags & SAVE_FLAG_CAP_ON_GROUND)) {
-        vec3s_copy(capPos, saveFile->capPos);
+        //vec3s_copy(capPos, saveFile->capPos);
+        vec3s_set(capPos, 0, 0, 0);
         return TRUE;
     }
     return FALSE;

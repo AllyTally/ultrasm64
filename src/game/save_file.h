@@ -24,7 +24,7 @@ struct SaveFile
     // cap can always be found in a fixed spot within the course
     u8 capLevel;
     u8 capArea;
-    Vec3s capPos;
+    //Vec3s capPos;
 
     u32 flags;
 
@@ -34,6 +34,9 @@ struct SaveFile
     u8 courseStars[COURSE_COUNT];
 
     u8 courseCoinScores[COURSE_STAGES_COUNT];
+
+    // Coin count
+    s32 totalCoins;
 
     struct SaveBlockSignature signature;
 };
@@ -59,6 +62,7 @@ struct MainMenuSaveData
 #else
 #define SUBTRAHEND 6
 #endif
+
 
     // Pad to match the EEPROM size of 0x200 (10 bytes on JP/US, 8 bytes on EU)
     u8 filler[EEPROM_SIZE / 2 - SUBTRAHEND - NUM_SAVE_FILES * (4 + sizeof(struct SaveFile))];
@@ -139,6 +143,8 @@ s32 save_file_exists(s32 fileIndex);
 u32 save_file_get_max_coin_score(s32 courseIndex);
 s32 save_file_get_course_star_count(s32 fileIndex, s32 courseIndex);
 s32 save_file_get_total_star_count(s32 fileIndex, s32 minCourse, s32 maxCourse);
+s32 save_file_get_total_coin_count(s32 fileIndex);
+void save_file_set_total_coin_count(s32 fileIndex, s32 coinCount);
 void save_file_set_flags(u32 flags);
 void save_file_clear_flags(u32 flags);
 u32 save_file_get_flags(void);
