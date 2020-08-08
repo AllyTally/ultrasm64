@@ -1166,7 +1166,8 @@ s32 act_death_exit(struct MarioState *m) {
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
-        m->numLives--;
+        //m->numLives--;
+        m->numCoins -= 10;
         // restore 7.75 units of health
         m->healCounter = 31;
     }

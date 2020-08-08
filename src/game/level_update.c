@@ -902,7 +902,7 @@ void update_hud_values(void) {
             gHudDisplay.flags &= ~HUD_DISPLAY_FLAG_COIN_COUNT;
         }
 
-        if (gHudDisplay.coins < gMarioState->numCoins) {
+        if (gHudDisplay.coins != gMarioState->numCoins) {
             if (gGlobalTimer & 0x00000001) {
                 u32 coinSound;
                 if (gMarioState->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) {
@@ -910,8 +910,8 @@ void update_hud_values(void) {
                 } else {
                     coinSound = SOUND_GENERAL_COIN;
                 }
-
-                gHudDisplay.coins += 1;
+                if (gHudDisplay.coins < gMarioState->numCoins) gHudDisplay.coins += 1;
+                if (gHudDisplay.coins > gMarioState->numCoins) gHudDisplay.coins -= 1;
                 play_sound(coinSound, gMarioState->marioObj->header.gfx.cameraToObject);
             }
         }
