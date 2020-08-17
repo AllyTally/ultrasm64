@@ -1,3 +1,5 @@
+#define LAYER_OPAQUE 8 // Temporarily set the opaque layer to 8, for the silhouette
+
 // Normal Mario Geo
 
 // 0x170002E0
