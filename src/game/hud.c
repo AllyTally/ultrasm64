@@ -153,23 +153,14 @@ void animate_power_meter_emphasized(void) {
  * Moves power meter y pos speed until it's at 200 to be visible.
  */
 static void animate_power_meter_deemphasizing(void) {
-    s16 speed = 5;
+    s16 xSpeed = (140 - sPowerMeterHUD.x) / 10;
+    s16 ySpeed = (200 - sPowerMeterHUD.y) / 10;
 
-    if (sPowerMeterHUD.y >= 181) {
-        speed = 3;
-    }
+    sPowerMeterHUD.x += xSpeed;
+    sPowerMeterHUD.y += ySpeed;
 
-    if (sPowerMeterHUD.y >= 191) {
-        speed = 2;
-    }
-
-    if (sPowerMeterHUD.y >= 196) {
-        speed = 1;
-    }
-
-    sPowerMeterHUD.y += speed;
-
-    if (sPowerMeterHUD.y >= 201) {
+    if (sPowerMeterHUD.y >= 199 && sPowerMeterHUD.y <= 201) {
+        sPowerMeterHUD.x = 140;
         sPowerMeterHUD.y = 200;
         sPowerMeterHUD.animation = POWER_METER_VISIBLE;
     }
@@ -194,7 +185,8 @@ void handle_power_meter_actions(s16 numHealthWedges) {
     // Show power meter if health is not full, less than 8
     if (numHealthWedges < 8 && sPowerMeterStoredHealth == 8 && sPowerMeterHUD.animation == POWER_METER_HIDDEN) {
         sPowerMeterHUD.animation = POWER_METER_EMPHASIZED;
-        sPowerMeterHUD.y = 166;
+        sPowerMeterHUD.x = gMarioScreenX + 40;
+        sPowerMeterHUD.y = gMarioScreenY + 20;
     }
 
     // Show power meter if health is full, has 8

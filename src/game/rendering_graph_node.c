@@ -336,11 +336,17 @@ static void geo_process_switch(struct GraphNodeSwitchCase *node) {
 /**
  * Process a camera node.
  */
+
+extern struct MarioState *gMarioState;
+
+extern u8 gMarioScreenX;
+extern u8 gMarioScreenY;
+
 static void geo_process_camera(struct GraphNodeCamera *node) {
     Mat4 cameraTransform;
     Mtx *rollMtx = alloc_display_list(sizeof(*rollMtx));
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
-
+    Vec3s marioPos3s;
     if (node->fnNode.func != NULL) {
         node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);
     }
@@ -359,6 +365,17 @@ static void geo_process_camera(struct GraphNodeCamera *node) {
         geo_process_node_and_siblings(node->fnNode.node.children);
         gCurGraphNodeCamera = NULL;
     }
+
+    // Convert Mario's coordinates into vec3s so they can be used in mtxf_mul_vec3s
+    vec3f_to_vec3s(marioPos3s, gMarioState->pos);
+
+    // Transform Mario's coordinates into view frustrum
+    mtxf_mul_vec3s(gMatStack[gMatStackIndex], marioPos3s);
+
+    // Perspective divide
+    gMarioScreenX = 2 * (0.5f - marioPos3s[0] / (f32)marioPos3s[2]) * (gCurGraphNodeRoot->width);
+    gMarioScreenY = 2 * (0.5f - marioPos3s[1] / (f32)marioPos3s[2]) * (gCurGraphNodeRoot->height);
+
     gMatStackIndex--;
 }
 
