@@ -1485,8 +1485,8 @@ void update_mario_health(struct MarioState *m) {
             m->hurtCounter--;
         }
 
-        if (m->health > 0x880) {
-            m->health = 0x880;
+        if (m->health > 0x380) {
+            m->health = 0x380;
         }
         if (m->health < 0x100) {
             m->health = 0xFF;
@@ -1884,7 +1884,8 @@ void init_mario_from_save_file(void) {
     gMarioState->numKeys = 0;
 
     gMarioState->numLives = 4;
-    gMarioState->health = 0x880;
+    //gMarioState->health = 0x880;
+    gMarioState->health = 0x380;
 
     gMarioState->prevNumStarsForDialog = gMarioState->numStars;
     gMarioState->unkB0 = 0xBD;

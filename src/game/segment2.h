@@ -67,4 +67,12 @@ extern Gfx dl_billboard_num_9[];
 extern u8 render_hud_power_meter_three_texture[];
 extern u8 render_hud_power_meter_three_texture_pal_rgba16[];
 
+extern u8 render_hud_power_meter_two_texture[];
+extern u8 render_hud_power_meter_two_texture_pal_rgba16[];
+
+extern u8 render_hud_power_meter_one_texture[];
+extern u8 render_hud_power_meter_one_texture_pal_rgba16[];
+
+extern u8 render_hud_power_meter_zero_texture[];
+
 #endif // SEGMENT2_H
