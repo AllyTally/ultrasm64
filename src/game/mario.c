@@ -1481,8 +1481,10 @@ void update_mario_health(struct MarioState *m) {
             m->healCounter--;
         }
         if (m->hurtCounter > 0) {
-            m->health -= 0x40;
-            m->hurtCounter--;
+            //m->health -= 0x40;
+            //m->hurtCounter--;
+            m->health -= 0x100; // make sure mario only takes one level of damage. weird patch, but this 
+            m->hurtCounter = 0; // games health system is super complicated!
         }
 
         if (m->health > 0x380) {
