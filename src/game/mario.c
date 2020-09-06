@@ -1708,7 +1708,9 @@ s32 execute_mario_action(UNUSED struct Object *o) {
     u8 *mario_shirt_cap_colors = segmented_to_virtual(&mario_red_lights_group);
     u8 *mario_overalls_colors  = segmented_to_virtual(&mario_blue_lights_group);
 
-    u8 costume = MCOL_NORMAL;
+    u8 costume = MCOL_RAINBOW;
+
+    update_mario_colors();
     // SHIRT
     // AMBIENT
     mario_shirt_cap_colors[0] = mario_shirt[costume][0]/2;
