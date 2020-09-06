@@ -9,6 +9,7 @@ enum mario_colors {
     MCOL_FIRE,
     MCOL_LUIGI,
     MCOL_RAINBOW,
+    MCOL_SMG4,
 };
 
 extern u8 mario_shirt[][3];

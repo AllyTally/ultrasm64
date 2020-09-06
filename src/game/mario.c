@@ -36,7 +36,6 @@
 #include "actors/group0.h"
 #include "mario_colors.h"
 
-
 u32 unused80339F10;
 s8 filler80339F1C[20];
 
@@ -1708,7 +1707,7 @@ s32 execute_mario_action(UNUSED struct Object *o) {
     u8 *mario_shirt_cap_colors = segmented_to_virtual(&mario_red_lights_group);
     u8 *mario_overalls_colors  = segmented_to_virtual(&mario_blue_lights_group);
 
-    u8 costume = MCOL_RAINBOW;
+    u8 costume = MCOL_NORMAL;
 
     update_mario_colors();
     // SHIRT
