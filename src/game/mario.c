@@ -33,6 +33,10 @@
 #include "sound_init.h"
 #include "rumble_init.h"
 
+#include "actors/group0.h"
+#include "mario_colors.h"
+
+
 u32 unused80339F10;
 s8 filler80339F1C[20];
 
@@ -1697,8 +1701,48 @@ void func_sh_8025574C(void) {
 /**
  * Main function for executing Mario's behavior.
  */
+
 s32 execute_mario_action(UNUSED struct Object *o) {
     s32 inLoop = TRUE;
+
+    u8 *mario_shirt_cap_colors = segmented_to_virtual(&mario_red_lights_group);
+    u8 *mario_overalls_colors  = segmented_to_virtual(&mario_blue_lights_group);
+
+    u8 costume = MCOL_NORMAL;
+    // SHIRT
+    // AMBIENT
+    mario_shirt_cap_colors[0] = mario_shirt[costume][0]/2;
+    mario_shirt_cap_colors[1] = mario_shirt[costume][1]/2;
+    mario_shirt_cap_colors[2] = mario_shirt[costume][2]/2;
+    mario_shirt_cap_colors[4] = mario_shirt[costume][0]/2;
+    mario_shirt_cap_colors[5] = mario_shirt[costume][1]/2;
+    mario_shirt_cap_colors[6] = mario_shirt[costume][2]/2;
+    // DIFFUSE
+    mario_shirt_cap_colors[8]  = mario_shirt[costume][0];
+    mario_shirt_cap_colors[9]  = mario_shirt[costume][1];
+    mario_shirt_cap_colors[10] = mario_shirt[costume][2];
+    mario_shirt_cap_colors[12] = mario_shirt[costume][0];
+    mario_shirt_cap_colors[13] = mario_shirt[costume][1];
+    mario_shirt_cap_colors[14] = mario_shirt[costume][2];
+    // OVERALLS
+    // AMBIENT
+    mario_overalls_colors[0] = mario_overalls[costume][0]/2;
+    mario_overalls_colors[1] = mario_overalls[costume][1]/2;
+    mario_overalls_colors[2] = mario_overalls[costume][2]/2;
+    // AMBIENT (COPY)
+    mario_overalls_colors[4] = mario_overalls[costume][0]/2;
+    mario_overalls_colors[5] = mario_overalls[costume][1]/2;
+    mario_overalls_colors[6] = mario_overalls[costume][2]/2;
+    // DIFFUSE
+    mario_overalls_colors[8]  = mario_overalls[costume][0];
+    mario_overalls_colors[9]  = mario_overalls[costume][1];
+    mario_overalls_colors[10] = mario_overalls[costume][2];
+    // DIFFUSE (COPY)
+    mario_overalls_colors[12] = mario_overalls[costume][0];
+    mario_overalls_colors[13] = mario_overalls[costume][1];
+    mario_overalls_colors[14] = mario_overalls[costume][2];
+
+
 
     if (gMarioState->action) {
         gMarioState->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;

@@ -17,6 +17,9 @@ extern const Gfx burn_smoke_seg4_dl_04022048[];
 extern const Gfx burn_smoke_seg4_dl_04022070[];
 
 // mario
+extern const Lights1 mario_red_lights_group;
+extern const Lights1 mario_blue_lights_group;
+
 extern const GeoLayout mario_geo_face_and_wings[];
 extern const GeoLayout mario_geo_left_hand[];
 extern const GeoLayout mario_geo_right_hand[];
