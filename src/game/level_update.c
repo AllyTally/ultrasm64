@@ -164,7 +164,7 @@ struct CreditsEntry sCreditsSequence[] = {
 struct MarioState gMarioStates[1];
 struct HudDisplay gHudDisplay;
 
-u8 gMarioScreenX, gMarioScreenY;
+s16 gMarioScreenX, gMarioScreenY;
 
 s16 sCurrPlayMode;
 u16 D_80339ECA;

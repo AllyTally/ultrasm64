@@ -339,8 +339,8 @@ static void geo_process_switch(struct GraphNodeSwitchCase *node) {
 
 extern struct MarioState *gMarioState;
 
-extern u8 gMarioScreenX;
-extern u8 gMarioScreenY;
+extern s16 gMarioScreenX;
+extern s16 gMarioScreenY;
 
 static void geo_process_camera(struct GraphNodeCamera *node) {
     Mat4 cameraTransform;

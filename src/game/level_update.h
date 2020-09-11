@@ -100,8 +100,8 @@ struct HudDisplay {
 };
 
 extern struct HudDisplay gHudDisplay;
-extern u8 gMarioScreenX;
-extern u8 gMarioScreenY;
+extern s16 gMarioScreenX;
+extern s16 gMarioScreenY;
 extern s8 gNeverEnteredCastle;
 
 enum HUDDisplayFlag {
