@@ -1037,9 +1037,8 @@ s32 act_twirl_land(struct MarioState *m) {
 s32 act_ground_pound_land(struct MarioState *m) {
     m->actionState = 1;
     if (m->input & INPUT_A_PRESSED) {
-        set_mario_action(m, ACT_DOUBLE_JUMP, 0);
-        m->vel[1] = 0x042;
-        return TRUE;
+        //m->vel[1] = 0x042;
+        return set_mario_action(m, ACT_GROUND_POUND_JUMP, 0);
     }
 
     if (m->input & INPUT_UNKNOWN_10) {
