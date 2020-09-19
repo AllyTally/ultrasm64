@@ -768,6 +768,13 @@ static void set_mario_y_vel_based_on_fspeed(struct MarioState *m, f32 initialVel
     // It was likely trampoline related based on code location.
     m->vel[1] = initialVelY + get_additive_y_vel_for_jumps() + m->forwardVel * multiplier;
 
+    if (m->marioObj->platform != NULL && m->marioObj->platform->oVelY > 0.0f){
+
+        m->vel[1] += m->marioObj->platform->oVelY;
+        m->pos[1] += m->marioObj->platform->oVelY;
+
+    }
+
     if (m->squishTimer != 0 || m->quicksandDepth > 1.0f) {
         m->vel[1] *= 0.5f;
     }

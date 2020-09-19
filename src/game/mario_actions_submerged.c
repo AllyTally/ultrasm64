@@ -228,7 +228,7 @@ static void stationary_slow_down(struct MarioState *m) {
 }
 
 static void update_swimming_speed(struct MarioState *m, f32 decelThreshold) {
-    f32 buoyancy = get_buoyancy(m);
+    //f32 buoyancy = get_buoyancy(m);
     f32 maxSpeed = 28.0f;
 
     if (m->action & ACT_FLAG_STATIONARY) {
@@ -247,9 +247,9 @@ static void update_swimming_speed(struct MarioState *m, f32 decelThreshold) {
         m->forwardVel -= 0.5f;
     }
 
-    m->vel[0] = m->forwardVel * coss(m->faceAngle[0]) * sins(m->faceAngle[1]);
-    m->vel[1] = m->forwardVel * sins(m->faceAngle[0]) + buoyancy;
-    m->vel[2] = m->forwardVel * coss(m->faceAngle[0]) * coss(m->faceAngle[1]);
+    m->vel[0] = m->forwardVel * coss(m->faceAngle[0]) * sins(m->faceAngle[1]) * 1.3;
+    m->vel[1] = m->forwardVel * sins(m->faceAngle[0]) * 1.3;
+    m->vel[2] = m->forwardVel * coss(m->faceAngle[0]) * coss(m->faceAngle[1]) * 1.3;
 }
 
 static void update_swimming_yaw(struct MarioState *m) {
@@ -284,20 +284,32 @@ static void update_swimming_yaw(struct MarioState *m) {
 static void update_swimming_pitch(struct MarioState *m) {
     s16 targetPitch = -(s16)(252.0f * m->controller->stickY);
 
-    s16 pitchVel;
-    if (m->faceAngle[0] < 0) {
-        pitchVel = 0x100;
-    } else {
-        pitchVel = 0x200;
+    s16 atSurface = m->pos[1] >= m->waterLevel - 100;
+
+    s16 pitchVel = -(s16)(3.0f * m->controller->stickY);
+
+    if ((m->faceAngle[0] += pitchVel) > 16065){
+        m->faceAngle[0] = 16065;
+    }
+    if ((m->faceAngle[0] += pitchVel) < -16065){
+        m->faceAngle[0] = -16065;
     }
 
-    if (m->faceAngle[0] < targetPitch) {
-        if ((m->faceAngle[0] += pitchVel) > targetPitch) {
-            m->faceAngle[0] = targetPitch;
+    if (atSurface) {
+        if (m->faceAngle[0] < 0) {
+            pitchVel = 0x100;
+        } else {
+            pitchVel = 0x200;
         }
-    } else if (m->faceAngle[0] > targetPitch) {
-        if ((m->faceAngle[0] -= pitchVel) < targetPitch) {
-            m->faceAngle[0] = targetPitch;
+
+        if (m->faceAngle[0] < targetPitch) {
+            if ((m->faceAngle[0] += pitchVel) > targetPitch) {
+                m->faceAngle[0] = targetPitch;
+            }
+        } else if (m->faceAngle[0] > targetPitch) {
+            if ((m->faceAngle[0] -= pitchVel) < targetPitch) {
+                m->faceAngle[0] = targetPitch;
+            }
         }
     }
 }
