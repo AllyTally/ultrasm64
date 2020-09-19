@@ -310,7 +310,12 @@ static void animate_power_meter_deemphasizing(void) {
     sPowerMeterHUD.x += xSpeed;
     sPowerMeterHUD.y += ySpeed;
 
-    if (sPowerMeterHUD.y < POWER_METER_Y) {
+    if ((sPowerMeterHUD.y < POWER_METER_Y) && (ySpeed == 0)) sPowerMeterHUD.y++;
+    if ((sPowerMeterHUD.y > POWER_METER_Y) && (ySpeed == 0)) sPowerMeterHUD.y--;
+    if ((sPowerMeterHUD.x < POWER_METER_X) && (xSpeed == 0)) sPowerMeterHUD.x++;
+    if ((sPowerMeterHUD.x > POWER_METER_X) && (xSpeed == 0)) sPowerMeterHUD.x--;
+
+    if ((sPowerMeterHUD.y == POWER_METER_Y) && (sPowerMeterHUD.x == POWER_METER_X)) {
         sPowerMeterHUD.x = POWER_METER_X;
         sPowerMeterHUD.y = POWER_METER_Y;
         sPowerMeterHUD.animation = POWER_METER_VISIBLE;
