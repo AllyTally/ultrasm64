@@ -461,12 +461,16 @@ void update_walking_speed(struct MarioState *m) {
 
 	if (analog_stick_held_back(m)) {
         m->faceAngle[1] = m->intendedYaw;
+        if (m->forwardVel < 0) {
+            mario_set_forward_vel(m, -m->forwardVel);
+            m->spareFloat = (0x10000*1.0f/2) / 5.0f;;
+        }
     }
 	else {
         m->faceAngle[1] =
             m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0xC00, 0xC00);
 	}
-	apply_slope_accel(m);
+    apply_slope_accel(m);
 }
 
 s32 should_begin_sliding(struct MarioState *m) {
@@ -839,6 +843,8 @@ s32 act_walking(struct MarioState *m) {
 
     check_ledge_climb_down(m);
     tilt_body_walking(m, startYaw);
+    m->spareFloat += (0x10000*1.0f - m->spareFloat) / 5.0f;
+    m->marioObj->header.gfx.angle[1] -= (s16) m->spareFloat;
     return FALSE;
 }
 
