@@ -105,7 +105,7 @@ void check_ledge_climb_down(struct MarioState *m) {
     s16 wallAngle;
     s16 wallDYaw;
 
-    if (m->forwardVel < 10.0f) {
+    if (m->forwardVel < 10.0f) { // if assist mode happens, change this
         wallCols.x = m->pos[0];
         wallCols.y = m->pos[1];
         wallCols.z = m->pos[2];
