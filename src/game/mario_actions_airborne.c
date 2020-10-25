@@ -849,6 +849,12 @@ s32 act_water_jump(struct MarioState *m) {
             break;
     }
 
+    if (m->prevAction == ACT_WATER_GROUND_POUND_JUMP) {
+        // maintain spinning from water ground pound jump anim
+        m->spareFloat += (0x10000*1.0f - m->spareFloat) / 5.0f;
+        m->marioObj->header.gfx.angle[1] -= (s16) m->spareFloat;
+    }
+
     return FALSE;
 }
 
