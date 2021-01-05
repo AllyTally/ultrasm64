@@ -1,52 +1,112 @@
-// Transparent Star
-
-// 0x0302C488
-static const Lights1 transparent_star_seg3_lights_0302C488 = gdSPDefLights1(
-    0x03, 0x05, 0x17,
-    0x1e, 0x32, 0xe6, 0x28, 0x28, 0x28
-);
-
-// 0x0302C4A0
-static const Vtx transparent_star_seg3_vertex_0302C4A0[] = {
-    {{{     0,      8,    -89}, 0, {     0,      0}, {0x00, 0x07, 0x82, 0xff}}},
-    {{{   190,   -201,      0}, 0, {     0,      0}, {0x55, 0xa3, 0x00, 0xff}}},
-    {{{     0,   -129,      0}, 0, {     0,      0}, {0x00, 0x82, 0x00, 0xff}}},
-    {{{   146,    -42,      0}, 0, {     0,      0}, {0x7c, 0xe7, 0x00, 0xff}}},
-    {{{     0,      8,     90}, 0, {     0,      0}, {0x00, 0x07, 0x7e, 0xff}}},
-    {{{   257,     84,      0}, 0, {     0,      0}, {0x68, 0x47, 0x00, 0xff}}},
-    {{{  -145,    -42,      0}, 0, {     0,      0}, {0x84, 0xe7, 0x00, 0xff}}},
-    {{{  -189,   -201,      0}, 0, {     0,      0}, {0xaa, 0xa3, 0x00, 0xff}}},
-    {{{  -256,     84,      0}, 0, {     0,      0}, {0x97, 0x47, 0x00, 0xff}}},
-    {{{     0,    246,      0}, 0, {     0,      0}, {0x00, 0x7e, 0x00, 0xff}}},
-    {{{    96,     99,      0}, 0, {     0,      0}, {0x3d, 0x6f, 0x00, 0xff}}},
-    {{{   -95,     99,      0}, 0, {     0,      0}, {0xc3, 0x6f, 0x00, 0xff}}},
+Vtx transparent_star_blue_starout_mesh_vtx_0[46] = {
+	{{{-38, -43, 0},0, {-16, 1008},{0x12, 0xCF, 0x8C, 0xFF}}},
+	{{{0, 9, -16},0, {-16, 1008},{0x0, 0x3, 0x81, 0xFF}}},
+	{{{0, -29, 0},0, {-16, 1008},{0x12, 0xCF, 0x8C, 0xFF}}},
+	{{{0, -29, 0},0, {-16, 1008},{0xEE, 0xCF, 0x8C, 0xFF}}},
+	{{{38, -43, 0},0, {-16, 1008},{0xEE, 0xCF, 0x8C, 0xFF}}},
+	{{{38, -43, 0},0, {-16, 1008},{0x3A, 0x6, 0x8F, 0xFF}}},
+	{{{0, 9, -16},0, {-16, 1008},{0x0, 0x2, 0x81, 0xFF}}},
+	{{{33, -5, 0},0, {-16, 1008},{0x3A, 0x6, 0x8F, 0xFF}}},
+	{{{33, -5, 0},0, {-16, 1008},{0x2A, 0xDD, 0x8D, 0xFF}}},
+	{{{61, 28, 0},0, {-16, 1008},{0x2A, 0xDD, 0x8D, 0xFF}}},
+	{{{61, 28, 0},0, {-16, 1008},{0x9, 0x40, 0x93, 0xFF}}},
+	{{{21, 34, 0},0, {-16, 1008},{0x9, 0x40, 0x93, 0xFF}}},
+	{{{21, 34, 0},0, {-16, 1008},{0x36, 0x1D, 0x91, 0xFF}}},
+	{{{0, 72, 0},0, {-16, 1008},{0x36, 0x1D, 0x91, 0xFF}}},
+	{{{0, 72, 0},0, {-16, 1008},{0xCA, 0x1D, 0x91, 0xFF}}},
+	{{{-21, 34, 0},0, {-16, 1008},{0xCA, 0x1D, 0x91, 0xFF}}},
+	{{{-21, 34, 0},0, {-16, 1008},{0xF7, 0x40, 0x93, 0xFF}}},
+	{{{0, 9, -16},0, {-16, 1008},{0x0, 0x2, 0x81, 0xFF}}},
+	{{{-61, 28, 0},0, {-16, 1008},{0xF7, 0x40, 0x93, 0xFF}}},
+	{{{-61, 28, 0},0, {-16, 1008},{0xD6, 0xDD, 0x8D, 0xFF}}},
+	{{{0, 9, -16},0, {-16, 1008},{0x0, 0x3, 0x81, 0xFF}}},
+	{{{-33, -5, 0},0, {-16, 1008},{0xD6, 0xDD, 0x8D, 0xFF}}},
+	{{{-33, -5, 0},0, {-16, 1008},{0xC6, 0x6, 0x8F, 0xFF}}},
+	{{{-38, -43, 0},0, {-16, 1008},{0xC6, 0x6, 0x8F, 0xFF}}},
+	{{{-38, -43, 0},0, {-16, 1008},{0x12, 0xCF, 0x74, 0xFF}}},
+	{{{0, -29, 0},0, {-16, 1008},{0x12, 0xCF, 0x74, 0xFF}}},
+	{{{0, 9, 16},0, {-16, 1008},{0x0, 0x3, 0x7F, 0xFF}}},
+	{{{0, -29, 0},0, {-16, 1008},{0xEE, 0xCF, 0x74, 0xFF}}},
+	{{{38, -43, 0},0, {-16, 1008},{0xEE, 0xCF, 0x74, 0xFF}}},
+	{{{38, -43, 0},0, {-16, 1008},{0x3A, 0x6, 0x71, 0xFF}}},
+	{{{33, -5, 0},0, {-16, 1008},{0x3A, 0x6, 0x71, 0xFF}}},
+	{{{33, -5, 0},0, {-16, 1008},{0x2A, 0xDD, 0x73, 0xFF}}},
+	{{{61, 28, 0},0, {-16, 1008},{0x2A, 0xDD, 0x73, 0xFF}}},
+	{{{0, 9, 16},0, {-16, 1008},{0x0, 0x3, 0x7F, 0xFF}}},
+	{{{61, 28, 0},0, {-16, 1008},{0x9, 0x40, 0x6D, 0xFF}}},
+	{{{21, 34, 0},0, {-16, 1008},{0x9, 0x40, 0x6D, 0xFF}}},
+	{{{21, 34, 0},0, {-16, 1008},{0x36, 0x1D, 0x6F, 0xFF}}},
+	{{{0, 72, 0},0, {-16, 1008},{0x36, 0x1D, 0x6F, 0xFF}}},
+	{{{0, 72, 0},0, {-16, 1008},{0xCA, 0x1D, 0x6F, 0xFF}}},
+	{{{-21, 34, 0},0, {-16, 1008},{0xCA, 0x1D, 0x6F, 0xFF}}},
+	{{{-21, 34, 0},0, {-16, 1008},{0xF7, 0x40, 0x6D, 0xFF}}},
+	{{{-61, 28, 0},0, {-16, 1008},{0xF7, 0x40, 0x6D, 0xFF}}},
+	{{{-61, 28, 0},0, {-16, 1008},{0xD6, 0xDD, 0x73, 0xFF}}},
+	{{{-33, -5, 0},0, {-16, 1008},{0xD6, 0xDD, 0x73, 0xFF}}},
+	{{{-33, -5, 0},0, {-16, 1008},{0xC6, 0x6, 0x71, 0xFF}}},
+	{{{-38, -43, 0},0, {-16, 1008},{0xC6, 0x6, 0x71, 0xFF}}},
 };
 
-// 0x0302C560 - 0x0302C620
-const Gfx transparent_star_seg3_dl_0302C560[] = {
-    gsSPLight(&transparent_star_seg3_lights_0302C488.l, 1),
-    gsSPLight(&transparent_star_seg3_lights_0302C488.a, 2),
-    gsSPVertex(transparent_star_seg3_vertex_0302C4A0, 12, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
-    gsSP2Triangles( 2,  1,  4, 0x0,  1,  3,  4, 0x0),
-    gsSP2Triangles( 5,  3,  0, 0x0,  4,  3,  5, 0x0),
-    gsSP2Triangles( 6,  7,  4, 0x0,  7,  2,  4, 0x0),
-    gsSP2Triangles( 8,  6,  4, 0x0,  9,  4, 10, 0x0),
-    gsSP2Triangles( 9, 11,  4, 0x0,  4,  5, 10, 0x0),
-    gsSP2Triangles(11,  8,  4, 0x0,  0,  2,  7, 0x0),
-    gsSP2Triangles( 0,  7,  6, 0x0,  0,  6,  8, 0x0),
-    gsSP2Triangles( 0,  8, 11, 0x0,  0, 11,  9, 0x0),
-    gsSP2Triangles(10,  5,  0, 0x0, 10,  0,  9, 0x0),
-    gsSPEndDisplayList(),
+Gfx transparent_star_blue_starout_mesh_tri_0[] = {
+	gsSPVertex(transparent_star_blue_starout_mesh_vtx_0 + 0, 16, 0),
+	gsSP1Triangle(0, 1, 2, 0),
+	gsSP1Triangle(3, 1, 4, 0),
+	gsSP1Triangle(5, 6, 7, 0),
+	gsSP1Triangle(8, 1, 9, 0),
+	gsSP1Triangle(10, 6, 11, 0),
+	gsSP1Triangle(12, 6, 13, 0),
+	gsSP1Triangle(14, 6, 15, 0),
+	gsSPVertex(transparent_star_blue_starout_mesh_vtx_0 + 16, 15, 0),
+	gsSP1Triangle(0, 1, 2, 0),
+	gsSP1Triangle(3, 4, 5, 0),
+	gsSP1Triangle(6, 1, 7, 0),
+	gsSP1Triangle(8, 9, 10, 0),
+	gsSP1Triangle(11, 12, 10, 0),
+	gsSP1Triangle(13, 14, 10, 0),
+	gsSPVertex(transparent_star_blue_starout_mesh_vtx_0 + 31, 15, 0),
+	gsSP1Triangle(0, 1, 2, 0),
+	gsSP1Triangle(3, 4, 2, 0),
+	gsSP1Triangle(5, 6, 2, 0),
+	gsSP1Triangle(7, 8, 2, 0),
+	gsSP1Triangle(9, 10, 2, 0),
+	gsSP1Triangle(11, 12, 2, 0),
+	gsSP1Triangle(13, 14, 2, 0),
+	gsSPEndDisplayList(),
 };
 
-// 0x0302C620 - 0x0302C658
-const Gfx transparent_star_seg3_dl_0302C620[] = {
-    gsDPPipeSync(),
-    gsDPSetCombineMode(G_CC_SHADEFADEA, G_CC_SHADEFADEA),
-    gsDPSetEnvColor(255, 255, 255, 120),
-    gsSPDisplayList(transparent_star_seg3_dl_0302C560),
-    gsDPSetEnvColor(255, 255, 255, 255),
-    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
-    gsSPEndDisplayList(),
+
+
+
+Gfx mat_transparent_star_lambert57_material_f3d_v3_layer5[] = {
+	gsDPPipeSync(),
+	gsDPSetCombineLERP(ENVIRONMENT, ENVIRONMENT, ENVIRONMENT, ENVIRONMENT, ENVIRONMENT, ENVIRONMENT, ENVIRONMENT, ENVIRONMENT, ENVIRONMENT, ENVIRONMENT, ENVIRONMENT, ENVIRONMENT, ENVIRONMENT, ENVIRONMENT, ENVIRONMENT, ENVIRONMENT),
+	gsDPSetRenderMode(G_RM_AA_ZB_XLU_SURF, G_RM_AA_ZB_OPA_SURF2),
+	gsSPTexture(65535, 65535, 0, 0, 1),
+	gsDPSetEnvColor(55, 74, 164, 127),
+	gsSPEndDisplayList(),
+};
+
+Gfx mat_revert_transparent_star_lambert57_material_f3d_v3_layer5[] = {
+	gsDPPipeSync(),
+	gsDPSetRenderMode(G_RM_AA_ZB_XLU_SURF, G_RM_NOOP2),
+	gsSPEndDisplayList(),
+};
+
+
+Gfx transparent_star_blue_starout_mesh[] = {
+	gsSPDisplayList(mat_transparent_star_lambert57_material_f3d_v3_layer5),
+	gsSPDisplayList(transparent_star_blue_starout_mesh_tri_0),
+	gsSPDisplayList(mat_revert_transparent_star_lambert57_material_f3d_v3_layer5),
+	gsSPEndDisplayList(),
+};
+
+Gfx transparent_star_material_revert_render_settings[] = {
+	gsDPPipeSync(),
+	gsSPSetGeometryMode(G_LIGHTING),
+	gsSPClearGeometryMode(G_TEXTURE_GEN),
+	gsDPSetCombineLERP(0, 0, 0, SHADE, 0, 0, 0, ENVIRONMENT, 0, 0, 0, SHADE, 0, 0, 0, ENVIRONMENT),
+	gsSPTexture(65535, 65535, 0, 0, 0),
+	gsDPSetEnvColor(255, 255, 255, 255),
+	gsDPSetAlphaCompare(G_AC_NONE),
+	gsSPEndDisplayList(),
 };
