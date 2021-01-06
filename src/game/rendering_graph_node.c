@@ -152,16 +152,45 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
         gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
     }
 
-    for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) {
-        if ((currList = node->listHeads[i]) != NULL) {
-            gDPSetRenderMode(gDisplayListHead++, modeList->modes[i], mode2List->modes[i]);
+	for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) {
+		if (i == 5) //Render Mario silhouette
+		{
+			if ((currList = node->listHeads[8]) != NULL)
+			{
+#define SCHWA AA_EN | IM_RD | CVG_DST_WRAP | CLR_ON_CVG | FORCE_BL
+
+					gDPSetFogColor(gDisplayListHead++, 0x0, 0x0, 0x0, 0x80);
+					gSPFogPosition(gDisplayListHead++, 0, 0);
+					gSPSetGeometryMode(gDisplayListHead++, G_FOG);
+					gDPSetRenderMode(gDisplayListHead++, SCHWA | GBL_c1(G_BL_CLR_FOG, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA), SCHWA | GBL_c2(G_BL_CLR_FOG, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
+					gDPSetEnvColor(gDisplayListHead++, 0x80, 0x80, 0x80, 0xA0);
+					gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
+                while (currList != NULL) {
+					gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
+						G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_LOAD);
+					gSPDisplayList(gDisplayListHead++, currList->displayList);
+					currList = currList->next;
+				}
+				gSPClearGeometryMode(gDisplayListHead++, G_FOG);
+				gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, 0xFF);
+				currList = node->listHeads[8]; 
+				while (currList != NULL) {
+					gDPSetRenderMode(gDisplayListHead++, modeList->modes[1], mode2List->modes[1]);
+					gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
+						G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_LOAD);
+					gSPDisplayList(gDisplayListHead++, currList->displayList);
+					currList = currList->next;
+				}
+			}
+		}
+        if (i < 8 && (currList = node->listHeads[i]) != NULL)
             while (currList != NULL) {
+				gDPSetRenderMode(gDisplayListHead++, modeList->modes[i], mode2List->modes[i]);
                 gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
-                          G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+                          G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_LOAD);
                 gSPDisplayList(gDisplayListHead++, currList->displayList);
                 currList = currList->next;
             }
-        }
     }
     if (enableZBuffer != 0) {
         gDPPipeSync(gDisplayListHead++);
