@@ -160,7 +160,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
 #define SCHWA AA_EN | IM_RD | CVG_DST_WRAP | CLR_ON_CVG | FORCE_BL
 
 					gDPSetFogColor(gDisplayListHead++, 0x0, 0x0, 0x0, 0x80);
-					gSPFogPosition(gDisplayListHead++, 0, 0);
+					gSPFogPosition(gDisplayListHead++, 1, 2);
 					gSPSetGeometryMode(gDisplayListHead++, G_FOG);
 					gDPSetRenderMode(gDisplayListHead++, SCHWA | GBL_c1(G_BL_CLR_FOG, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA), SCHWA | GBL_c2(G_BL_CLR_FOG, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
 					gDPSetEnvColor(gDisplayListHead++, 0x80, 0x80, 0x80, 0xA0);
