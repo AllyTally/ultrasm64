@@ -12,6 +12,7 @@
 #include "segments.h"
 #include "main.h"
 #include "rumble_init.h"
+#include "coin_death_screen.h"
 #include "version.h"
 #ifdef UNF
 #include "usb/usb.h"

@@ -49,6 +49,7 @@ static const LevelScript script_L2[4];
 static const LevelScript goto_mario_head_regular[4];
 static const LevelScript goto_mario_head_dizzy[4];
 static const LevelScript script_L5[4];
+static const LevelScript script_coin_death[];
 
 #define STUB_LEVEL(_0, _1, _2, _3, _4, _5, _6, _7, _8)
 #define DEFINE_LEVEL(_0, _1, _2, folder, _4, _5, _6, _7, _8, _9, _10) static const LevelScript script_exec_ ## folder [4 + 1];
@@ -124,6 +125,12 @@ const LevelScript level_main_scripts_entry[] = {
     JUMP_IF(/*op*/ OP_EQ, /*arg*/ -3, goto_mario_head_dizzy),
     JUMP_IF(/*op*/ OP_EQ, /*arg*/ -8, script_L1),
     JUMP_IF(/*op*/ OP_EQ, /*arg*/ -9, script_L5),
+    
+    JUMP_IF(/*op*/ OP_EQ, /*arg*/ -10, script_coin_death), // coin death anim
+};
+
+static const LevelScript script_coin_death[] = {
+    EXIT_AND_EXECUTE(/*seg*/ 0x14, _menuSegmentRomStart, _menuSegmentRomEnd, level_main_menu_entry_coin),
 };
 
 static const LevelScript script_L1[] = {

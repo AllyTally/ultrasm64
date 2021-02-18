@@ -49,4 +49,8 @@ extern const u8 eu_course_strings_de_table[];
 extern const LevelScript level_main_menu_entry_1[];
 extern const LevelScript level_main_menu_entry_2[];
 
+extern const GeoLayout main_menu_geo_coin[];
+extern const LevelScript level_main_menu_entry_coin[];
+extern Gfx *geo18_display_coin_anim(u32 run, UNUSED struct GraphNode *sp44, UNUSED u32 sp48);
+
 #endif
