@@ -15,24 +15,6 @@
 
 #include "levels/menu/header.h"
 
-const GeoLayout main_menu_geo_coin[] = {
-    GEO_NODE_SCREEN_AREA(0, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
-    GEO_OPEN_NODE(),
-        GEO_ZBUFFER(0),
-        GEO_OPEN_NODE(),
-            GEO_NODE_ORTHO(100),
-            GEO_OPEN_NODE(),
-                GEO_BACKGROUND_COLOR(0x0001),
-            GEO_CLOSE_NODE(),
-        GEO_CLOSE_NODE(),
-        GEO_ZBUFFER(0),
-        GEO_OPEN_NODE(),
-            GEO_ASM(0, geo18_display_coin_anim),
-        GEO_CLOSE_NODE(),
-    GEO_CLOSE_NODE(),
-    GEO_END(),
-};
-
 // 0x0E0001D0
 const GeoLayout geo_menu_mario_save_button[] = {
    GEO_NODE_START(),

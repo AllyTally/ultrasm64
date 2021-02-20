@@ -18,28 +18,6 @@
 #include "make_const_nonconst.h"
 #include "levels/menu/header.h"
 
-#include "src/game/coin_death_screen.h"
-
-const LevelScript level_main_menu_entry_coin[] = {
-    INIT_LEVEL(),
-    FIXED_LOAD(/*loadAddr*/ _goddardSegmentStart, /*romStart*/ _goddardSegmentRomStart, /*romEnd*/ _goddardSegmentRomEnd),
-    LOAD_YAY0(/*seg*/ 0x07, _intro_segment_7SegmentRomStart, _intro_segment_7SegmentRomEnd),
-    ALLOC_LEVEL_POOL(),
-
-    AREA(/*index*/ 1, main_menu_geo_coin),
-    END_AREA(),
-
-    FREE_LEVEL_POOL(),
-    LOAD_AREA(/*area*/ 1),
-    SET_MENU_MUSIC(/*seq*/ 0x0000),
-    SLEEP(/*frames*/ 90),
-    CLEAR_LEVEL(),
-    //CALL(/*arg*/ 0, /*func*/ lvl_respawn_from_coins),
-    SLEEP_BEFORE_EXIT(/*frames*/ 1),
-    SET_REG(/*value*/ LEVEL_CASTLE_GROUNDS),
-    EXIT_AND_EXECUTE(/*seg*/ 0x15, _scriptsSegmentRomStart, _scriptsSegmentRomEnd, level_main_scripts_entry),
-};
-
 const LevelScript level_main_menu_entry_1[] = {
     INIT_LEVEL(),
     FIXED_LOAD(/*loadAddr*/ _goddardSegmentStart, /*romStart*/ _goddardSegmentRomStart, /*romEnd*/ _goddardSegmentRomEnd),

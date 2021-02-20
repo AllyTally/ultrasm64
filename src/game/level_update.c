@@ -728,7 +728,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 sSourceWarpNodeId = WARP_NODE_F0;
                 val04 = FALSE;
                 gSavedCourseNum = COURSE_NONE;
-                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x00, 0x00, 0x00, 0x00);
+                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x3C, 0x00, 0x00, 0x00);
                 break;
 
             case WARP_OP_STAR_EXIT:
@@ -742,24 +742,10 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 if (m->numLives == 0) {
                     sDelayedWarpOp = WARP_OP_GAME_OVER;
                 }
-                sDelayedWarpOp = WARP_OP_DEATH_COINS;
-                sDelayedWarpTimer = 60;
+                sDelayedWarpTimer = 48;
                 sSourceWarpNodeId = WARP_NODE_DEATH;
-                play_transition(WARP_TRANSITION_FADE_INTO_BOWSER, 0x20, 0x00, 0x00, 0x00);
+                play_transition(WARP_TRANSITION_FADE_INTO_BOWSER, 0x30, 0x00, 0x00, 0x00);
                 play_sound(SOUND_MENU_BOWSER_LAUGH, gGlobalSoundSource);
-                break;
-
-            case WARP_OP_RESPAWN:
-                sDelayedWarpTimer = 30;
-                sSourceWarpNodeId = WARP_NODE_DEATH;
-                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x00, 0x00, 0x00, 0x00);
-                //play_sound(SOUND_MENU_BOWSER_LAUGH, gGlobalSoundSource);
-                break;
-
-            case WARP_OP_DEATH_COINS:
-                sDelayedWarpTimer = 60;
-                sSourceWarpNodeId = WARP_NODE_DEATH;
-                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x10, 0x00, 0x00, 0x00);
                 break;
 
             case WARP_OP_WARP_FLOOR:
@@ -866,10 +852,6 @@ void initiate_delayed_warp(void) {
                     warp_special(-1);
                     sound_banks_enable(SEQ_PLAYER_SFX,
                                        SOUND_BANKS_ALL & ~SOUND_BANKS_DISABLED_AFTER_CREDITS);
-                    break;
-
-                case WARP_OP_DEATH_COINS:
-                    warp_special(-10);
                     break;
 
                 case WARP_OP_DEMO_NEXT:
@@ -1221,7 +1203,7 @@ s32 init_level(void) {
                     if (save_file_exists(gCurrSaveFileNum - 1)) {
                         set_mario_action(gMarioState, ACT_IDLE, 0);
                     } else {
-                        set_mario_action(gMarioState, ACT_IDLE, 0);
+                        set_mario_action(gMarioState, ACT_INTRO_CUTSCENE, 0);
                         val4 = 1;
                     }
                 }

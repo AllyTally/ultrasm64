@@ -6,7 +6,6 @@
 struct LevelCommand;
 
 extern u8 level_script_entry[];
-extern u8 level_script_entry_coin[];
 
 struct LevelCommand *level_script_execute(struct LevelCommand *cmd);
 
