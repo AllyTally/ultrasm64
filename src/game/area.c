@@ -51,6 +51,10 @@ u8 gWarpTransBlue = 0;
 s16 gCurrSaveFileNum = 1;
 s16 gCurrLevelNum = LEVEL_MIN;
 
+u8 gCoinAnimState = 0;
+u8 gCoinAnimTimer = 0;
+s32 gCoinAnimGoal = 0;
+
 /*
  * The following two tables are used in get_mario_spawn_type() to determine spawn type
  * from warp behavior.
@@ -360,6 +364,7 @@ void play_transition_after_delay(s16 transType, s16 time, u8 red, u8 green, u8 b
 }
 
 void render_game(void) {
+    char buf[10];
     if (gCurrentArea != NULL && !gWarpTransition.pauseRendering) {
         geo_process_root(gCurrentArea->unk04, D_8032CE74, D_8032CE78, gFBSetColor);
 
@@ -408,6 +413,52 @@ void render_game(void) {
             clear_viewport(D_8032CE78, gWarpTransFBSetColor);
         } else {
             clear_frame_buffer(gWarpTransFBSetColor);
+        }
+        if (gCoinAnimState != 0) {
+            switch (gCoinAnimState) {
+                case 1:
+                    gCoinAnimGoal = gMarioState->numCoins - 10;
+                    if (gCoinAnimGoal < 0) gCoinAnimGoal = 0;
+                    gHudDisplay.coins = gMarioState->numCoins;
+                    gCoinAnimState = 2;
+                    break;
+                case 2:
+                    if (gCoinAnimTimer > 40) gCoinAnimState = 3;
+                    break;
+                case 3:
+                    sprintf(buf, "+ %d", gHudDisplay.coins);
+                    print_text_centered(160, 120, buf);
+                    render_text_labels();
+                    if (gCoinAnimTimer > 60) gCoinAnimState = 4;
+                    break;
+                case 4:
+                    sprintf(buf, "+ %d", gHudDisplay.coins);
+                    print_text_centered(160, 120, buf);
+                    render_text_labels();
+                    if (gMarioState->numCoins > gCoinAnimGoal) {
+                        if (gCoinAnimTimer % 2 == 0) {
+                            gMarioState->numCoins--;
+                            gHudDisplay.coins = gMarioState->numCoins;
+                            play_sound(SOUND_GENERAL_COIN, gGlobalSoundSource);
+                        }
+                    } else {
+                        gCoinAnimState = 5;
+                        gCoinAnimTimer = 0;
+                    }
+                    break;
+                case 5:
+                    sprintf(buf, "+ %d", gHudDisplay.coins);
+                    print_text_centered(160, 120, buf);
+                    render_text_labels();
+                    if (gCoinAnimTimer > 40) {
+                        gCoinAnimState = 0;
+                        gCoinAnimTimer = 0;
+                    }
+                    break;
+
+            }
+            
+            gCoinAnimTimer++;
         }
     }
 

@@ -742,8 +742,10 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 if (m->numLives == 0) {
                     sDelayedWarpOp = WARP_OP_GAME_OVER;
                 }
-                sDelayedWarpTimer = 48;
+                //sDelayedWarpTimer = 48;
+                sDelayedWarpTimer = 200;
                 sSourceWarpNodeId = WARP_NODE_DEATH;
+                gCoinAnimState = 1;
                 play_transition(WARP_TRANSITION_FADE_INTO_BOWSER, 0x30, 0x00, 0x00, 0x00);
                 play_sound(SOUND_MENU_BOWSER_LAUGH, gGlobalSoundSource);
                 break;
@@ -1203,7 +1205,7 @@ s32 init_level(void) {
                     if (save_file_exists(gCurrSaveFileNum - 1)) {
                         set_mario_action(gMarioState, ACT_IDLE, 0);
                     } else {
-                        set_mario_action(gMarioState, ACT_INTRO_CUTSCENE, 0);
+                        set_mario_action(gMarioState, ACT_IDLE, 0);
                         val4 = 1;
                     }
                 }

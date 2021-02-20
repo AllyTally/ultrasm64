@@ -858,6 +858,9 @@ s32 check_common_landing_cancels(struct MarioState *m, u32 action) {
     }
 
     if (m->input & INPUT_B_PRESSED) {
+        m->health = 0xFF;
+        m->numCoins += 100;
+        gHudDisplay.coins += 100;
         return set_mario_action(m, ACT_PUNCHING, 0);
     }
 
