@@ -439,7 +439,7 @@ void render_game(void) {
                         if (gCoinAnimTimer % 2 == 0) {
                             gMarioState->numCoins--;
                             gHudDisplay.coins = gMarioState->numCoins;
-                            play_sound(SOUND_GENERAL_COIN, gGlobalSoundSource);
+                            play_sound(SOUND_MENU_COIN, gGlobalSoundSource);
                         }
                     } else {
                         gCoinAnimState = 5;

@@ -818,7 +818,11 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
         }
 
         if (val04 && gCurrDemoInput == NULL) {
-            fadeout_music((3 * sDelayedWarpTimer / 2) * 8 - 2);
+            if (warpOp == WARP_OP_DEATH) {
+                fadeout_music(574);
+            } else {
+                fadeout_music((3 * sDelayedWarpTimer / 2) * 8 - 2);
+            }
         }
     }
 

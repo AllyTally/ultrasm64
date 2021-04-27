@@ -7006,6 +7006,7 @@ sound_ref .sound_menu_mario_castle_warp2
 .else
   sound_ref .sound_menu_star_sound_okey_dokey
   sound_ref .sound_menu_star_sound_lets_a_go
+  sound_ref .sound_general_coin
   sound_ref .sound_menu_yoshi_gain_lives
   sound_ref .sound_menu_enter_pipe
   sound_ref .sound_menu_exit_pipe
