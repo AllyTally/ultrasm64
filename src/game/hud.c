@@ -13,6 +13,7 @@
 #include "area.h"
 #include "save_file.h"
 #include "print.h"
+#include "engine/surface_load.h"
 
 /* @file hud.c
  * This file implements HUD rendering and power meter animations.
@@ -22,6 +23,41 @@
 
 #define POWER_METER_X 320 - 64
 #define POWER_METER_Y 0
+// ------------- FPS COUNTER ---------------
+// To use it, call print_fps(x,y); every frame.
+#define FRAMETIME_COUNT 30
+
+OSTime frameTimes[FRAMETIME_COUNT];
+u8 curFrameTimeIndex = 0;
+
+#include "PR/os_convert.h"
+
+// Call once per frame
+f32 calculate_and_update_fps()
+{
+    OSTime newTime = osGetTime();
+    OSTime oldTime = frameTimes[curFrameTimeIndex];
+    frameTimes[curFrameTimeIndex] = newTime;
+
+    curFrameTimeIndex++;
+    if (curFrameTimeIndex >= FRAMETIME_COUNT)
+        curFrameTimeIndex = 0;
+
+
+    return ((f32)FRAMETIME_COUNT * 1000000.0f) / (s32)OS_CYCLES_TO_USEC(newTime - oldTime);
+}
+
+void print_fps(s32 x, s32 y)
+{
+    f32 fps = calculate_and_update_fps();
+    char text[10];
+
+    sprintf(text, "%2.2f", fps);
+
+    print_text(x, y, text);
+}
+
+// ------------ END OF FPS COUNER -----------------
 
 struct PowerMeterHUD {
     s8 animation;
@@ -635,5 +671,14 @@ void render_hud(void) {
             render_hud_timer();
         }
         //render_hud_power_meter_three((s32) sPowerMeterHUD.x, (s32) sPowerMeterHUD.y, 64, 64, 1, 0);
+
+        if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_SURFACES)
+        {
+            print_text(10, 40, "SURFACE POOL FULL");
+        }
+        if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_NODES)
+        {
+            print_text(10, 60, "SURFACE NODE POOL FULL");
+        }
     }
 }

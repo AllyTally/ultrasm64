@@ -26,6 +26,9 @@
 #include "usb/usb.h"
 #include "usb/debug.h"
 #endif
+#ifdef SRAM
+#include "sram.h"
+#endif
 #include <prevent_bss_reordering.h>
 
 // FIXME: I'm not sure all of these variables belong in this file, but I don't
@@ -38,7 +41,12 @@ struct GfxPool *gGfxPool;
 OSContStatus gControllerStatuses[4];
 OSContPad gControllerPads[4];
 u8 gControllerBits;
+#ifdef EEP
 s8 gEepromProbe;
+#endif
+#ifdef SRAM
+s8 gSramProbe;
+#endif
 OSMesgQueue gGameVblankQueue;
 OSMesgQueue D_80339CB8;
 OSMesg D_80339CD0;
@@ -54,6 +62,7 @@ UNUSED u8 filler80339D30[0x90];
 
 s32 unused8032C690 = 0;
 u32 gGlobalTimer = 0;
+u8 gIsConsole;
 
 u16 sCurrFBNum = 0;
 u16 frameBufferIndex = 0;
@@ -234,6 +243,9 @@ void create_task_structure(void) {
 #ifdef  F3DZEX_GBI_2
     gGfxSPTask->task.t.ucode = gspF3DZEX2_PosLight_fifoTextStart;
     gGfxSPTask->task.t.ucode_data = gspF3DZEX2_PosLight_fifoDataStart;
+#elif   F3DEX2PL_GBI
+    gGfxSPTask->task.t.ucode = gspF3DEX2_PosLight_fifoTextStart;
+    gGfxSPTask->task.t.ucode_data = gspF3DEX2_PosLight_fifoDataStart;
 #elif   F3DEX_GBI_2
     gGfxSPTask->task.t.ucode = gspF3DEX2_fifoTextStart;
     gGfxSPTask->task.t.ucode_data = gspF3DEX2_fifoDataStart;
@@ -311,6 +323,11 @@ void draw_reset_bars(void) {
 }
 
 void rendering_init(void) {
+    if (IO_READ(DPC_PIPEBUSY_REG) == 0) {
+        gIsConsole = 0;
+    } else {
+        gIsConsole = 1;
+    }
     gGfxPool = &gGfxPools[0];
     set_segment_base_addr(1, gGfxPool->buffer);
     gGfxSPTask = &gGfxPool->spTask;
@@ -321,7 +338,10 @@ void rendering_init(void) {
     end_master_display_list();
     send_display_list(&gGfxPool->spTask);
 
-    frameBufferIndex++;
+    // Skip incrementing the initial framebuffer index on emulators so that they display immediately as the Gfx task finishes
+    if ((*(volatile u32 *)0xA4100010) != 0) { // Read RDP Clock Register, has a value of zero on emulators
+        frameBufferIndex++;
+    }
     gGlobalTimer++;
 }
 
@@ -347,11 +367,14 @@ void display_and_vsync(void) {
     osViSwapBuffer((void *) PHYSICAL_TO_VIRTUAL(gPhysicalFrameBuffers[sCurrFBNum]));
     profiler_log_thread5_time(THREAD5_END);
     osRecvMesg(&gGameVblankQueue, &D_80339BEC, OS_MESG_BLOCK);
-    if (++sCurrFBNum == 3) {
-        sCurrFBNum = 0;
-    }
-    if (++frameBufferIndex == 3) {
-        frameBufferIndex = 0;
+    // Skip swapping buffers on emulator so that they display immediately as the Gfx task finishes
+    if ((*(volatile u32 *)0xA4100010) != 0) { // Read RDP Clock Register, has a value of zero on emulators
+        if (++sCurrFBNum == 3) {
+            sCurrFBNum = 0;
+        }
+        if (++frameBufferIndex == 3) {
+            frameBufferIndex = 0;
+        }
     }
     gGlobalTimer++;
 }
@@ -555,9 +578,14 @@ void init_controllers(void) {
     gControllers[0].controllerData = &gControllerPads[0];
     osContInit(&gSIEventMesgQueue, &gControllerBits, &gControllerStatuses[0]);
 
+#ifdef EEP
     // strangely enough, the EEPROM probe for save data is done in this function.
     // save pak detection?
     gEepromProbe = osEepromProbe(&gSIEventMesgQueue);
+#endif
+#ifdef SRAM
+    gSramProbe = nuPiInitSram();
+#endif
 
     // loop over the 4 ports and link the controller structs to the appropriate
     // status and pad. Interestingly, although there are pointers to 3 controllers,

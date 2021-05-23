@@ -1,5 +1,6 @@
 #include <ultra64.h>
 #include <PR/os_system.h>
+#include <PR/os_vi.h>
 #include <stdio.h>
 
 #include "sm64.h"
@@ -45,6 +46,8 @@ OSMesg gPIMesgBuf[32];
 OSMesg gSIEventMesgBuf[1];
 OSMesg gIntrMesgBuf[16];
 OSMesg gUnknownMesgBuf[16];
+
+OSViMode VI;
 
 struct VblankHandler *gVblankHandler1 = NULL;
 struct VblankHandler *gVblankHandler2 = NULL;
@@ -312,14 +315,16 @@ void thread3_main(UNUSED void *arg) {
     setup_mesg_queues();
     alloc_pool();
     load_engine_code_segment();
+#ifndef UNF
     crash_screen_init();
+#endif
 
-#ifdef UNF
-    debug_printf("Super Mario 64\n");
-    debug_printf("Built by: %s\n", __username__);
-    debug_printf("Date    : %s\n", __datetime__);
-    debug_printf("Compiler: %s\n", __compiler__);
-    debug_printf("Linker  : %s\n", __linker__);
+#ifdef DEBUG
+    osSyncPrintf("Super Mario 64\n");
+    osSyncPrintf("Built by: %s\n", __username__);
+    osSyncPrintf("Date    : %s\n", __datetime__);
+    osSyncPrintf("Compiler: %s\n", __compiler__);
+    osSyncPrintf("Linker  : %s\n", __linker__);
 #endif
 
     create_thread(&gSoundThread, 4, thread4_sound, NULL, gThread4Stack + 0x2000, 20);
@@ -327,7 +332,6 @@ void thread3_main(UNUSED void *arg) {
 
     create_thread(&gGameLoopThread, 5, thread5_game_loop, NULL, gThread5Stack + 0x2000, 10);
     osStartThread(&gGameLoopThread);
-
 
     while (TRUE) {
         OSMesg msg;
@@ -407,6 +411,28 @@ void turn_off_audio(void) {
     }
 }
 
+void change_vi(OSViMode *mode, int width, int height){
+
+    mode->comRegs.width = width;
+    mode->comRegs.xScale = (width*512)/320;
+    if(height > 240)
+    {
+        mode->comRegs.ctrl |= 0x40;
+        mode->fldRegs[0].origin = width*2;
+        mode->fldRegs[1].origin = width*4;
+        mode->fldRegs[0].yScale = 0x2000000|((height*1024)/240);
+        mode->fldRegs[1].yScale = 0x2000000|((height*1024)/240);
+        mode->fldRegs[0].vStart = mode->fldRegs[1].vStart-0x20002;
+    }
+    else
+    {
+        mode->fldRegs[0].origin = width*2;
+        mode->fldRegs[1].origin = width*4;
+        mode->fldRegs[0].yScale = ((height*1024)/240);
+        mode->fldRegs[1].yScale = ((height*1024)/240);
+    }
+}
+
 /**
  * Initialize hardware, start main thread, then idle.
  */
@@ -416,17 +442,22 @@ void thread1_idle(UNUSED void *arg) {
 	switch ( osTvType ) {
 	case OS_TV_NTSC:
 		// NTSC
-        osViSetMode(&osViModeTable[OS_VI_NTSC_LAN1]);
+        //osViSetMode(&osViModeTable[OS_VI_NTSC_LAN1]);
+        VI = osViModeTable[OS_VI_NTSC_LAN1];
 		break;
 	case OS_TV_MPAL:
 		// MPAL
-        osViSetMode(&osViModeTable[OS_VI_MPAL_LAN1]);
+        //osViSetMode(&osViModeTable[OS_VI_MPAL_LAN1]);
+        VI = osViModeTable[OS_VI_MPAL_LAN1];
 		break;
 	case OS_TV_PAL:
 		// PAL
-		osViSetMode(&osViModeTable[OS_VI_PAL_LAN1]);
+		//osViSetMode(&osViModeTable[OS_VI_PAL_LAN1]);
+        VI = osViModeTable[OS_VI_PAL_LAN1];
 		break;
 	}
+    change_vi(&VI, SCREEN_WIDTH, SCREEN_HEIGHT);
+    osViSetMode(&VI);
     osViBlack(TRUE);
     osViSetSpecialFeatures(OS_VI_DITHER_FILTER_ON);
     osViSetSpecialFeatures(OS_VI_GAMMA_OFF);
@@ -445,8 +476,33 @@ void thread1_idle(UNUSED void *arg) {
     }
 }
 
+void ClearRAM(void)
+{
+    bzero(_mainSegmentEnd, (size_t)osMemSize - (size_t)OS_K0_TO_PHYSICAL(_mainSegmentEnd));
+}
+
+#ifdef ISVPRINT
+extern u32 gISVDbgPrnAdrs;
+extern u32 gISVFlag;
+
+void osInitialize_fakeisv() {
+    /* global flag to skip `__checkHardware_isv` from being called. */
+    gISVFlag = 0x49533634;  // 'IS64'
+ 
+    /* printf writes go to this address, cen64(1) has this hardcoded. */
+    gISVDbgPrnAdrs = 0x13FF0000;
+ 
+    /* `__printfunc`, used by `osSyncPrintf` will be set. */
+    __osInitialize_isv();
+}
+#endif
+
 void main_func(void) {
-    osInitialize();
+    ClearRAM();
+    __osInitialize_common();
+#ifdef ISVPRINT
+    osInitialize_fakeisv();
+#endif
 
     create_thread(&gIdleThread, 1, thread1_idle, NULL, gIdleThreadStack + 0x800, 100);
     osStartThread(&gIdleThread);
