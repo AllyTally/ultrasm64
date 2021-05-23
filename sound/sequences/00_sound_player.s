@@ -7808,7 +7808,7 @@ chan_end
   chan_setpanmix 0
   chan_setenvelope .envelope_3378
   chan_ioreadval 4
-  chan_subtract 0x28
+  chan_subtract 0x29
   chan_readseq .major_scale
   chan_writeseq 0, .transpose_by_coin_index, 1
   chan_setlayer 0, .layer_3146
@@ -7868,7 +7868,7 @@ chan_end
   chan_setnotepriority 14
   chan_setpanmix 0
   chan_ioreadval 4
-  chan_subtract 0x30
+  chan_subtract 0x31
   chan_readseq .major_scale
   chan_writeseq 0, .layer_31A0, 1
   chan_setlayer 0, .layer_31A0

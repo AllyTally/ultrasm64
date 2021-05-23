@@ -555,8 +555,8 @@
 
 // US/EU only; an index between 0-7 or 0-4 is added to the sound ID before
 // playing, producing the same sound with different pitch.
-#define SOUND_MENU_COLLECT_RED_COIN              /* 0x78289080 */ SOUND_ARG_LOAD(SOUND_BANK_MENU,     0x28, 0x90, SOUND_CONSTANT_FREQUENCY | SOUND_DISCRETE)
-#define SOUND_MENU_COLLECT_SECRET                /* 0x70302080 */ SOUND_ARG_LOAD(SOUND_BANK_MENU,     0x30, 0x20, SOUND_DISCRETE)
+#define SOUND_MENU_COLLECT_RED_COIN              /* 0x78289080 */ SOUND_ARG_LOAD(SOUND_BANK_MENU,     0x29, 0x90, SOUND_CONSTANT_FREQUENCY | SOUND_DISCRETE)
+#define SOUND_MENU_COLLECT_SECRET                /* 0x70302080 */ SOUND_ARG_LOAD(SOUND_BANK_MENU,     0x31, 0x20, SOUND_DISCRETE)
 
 // Channel 8 loads sounds from the same place as channel 3, making it possible
 // to play two channel 3 sounds at once (since just one sound from each channel

@@ -5,6 +5,21 @@
 #include "memory.h"
 #include "print.h"
 #include "segment2.h"
+#include "string.h"
+
+s8 numberKerning[] = 
+{
+  9, // 0
+  5, // 1
+  8, // 2
+  8, // 3
+  10, // 4
+  8, // 5
+  10, // 6
+  9, // 7
+  10, // 8
+  10  // 9
+};
 
 /**
  * This file handles printing and formatting the colorful text that
@@ -249,6 +264,46 @@ void print_text(s32 x, s32 y, const char *str) {
     sTextLabelsCount++;
 }
 
+void print_hud_numbers(s32 x, s32 y, const char *number) {
+    char c = 0;
+    s32 length = strlen(number);
+    s32 srcIndex = 0;
+    s32 offset = 0;
+
+    c = number[srcIndex];
+
+    // Set the array with the text to print while finding length.
+    while (length >= 0) {
+        
+        print_hud_number(x + offset, y, c - 48);
+        offset += numberKerning[c - 48];
+
+        length--;
+        srcIndex++;
+        c = number[srcIndex];
+    }
+}
+
+/**
+ * Prints a hud number at given X, Y coordinates.
+ */
+
+void print_hud_number(s32 x, s32 y, s32 number) {
+    // Don't continue if there is no memory to do so.
+    if ((sTextLabels[sTextLabelsCount] = mem_pool_alloc(gEffectsMemoryPool,
+                                                        sizeof(struct TextLabel))) == NULL) {
+        return;
+    }
+
+    sTextLabels[sTextLabelsCount]->x = x;
+    sTextLabels[sTextLabelsCount]->y = y;
+
+    sTextLabels[sTextLabelsCount]->buffer[0] = NUM_ZERO + number;
+    sTextLabels[sTextLabelsCount]->length = 1;
+
+    sTextLabelsCount++;
+}
+
 /**
  * Prints text in the colorful lettering centered at given X, Y coordinates.
  */
@@ -285,6 +340,10 @@ void print_text_centered(s32 x, s32 y, const char *str) {
  * Converts a char into the proper colorful glyph for the char.
  */
 s8 char_to_glyph_index(char c) {
+    if (c >= NUM_ZERO && c <= NUM_NINE) {
+        return c;
+    }
+
     if (c >= 'A' && c <= 'Z') {
         return c - 55;
     }
@@ -393,7 +452,7 @@ void render_textrect(s32 x, s32 y, s32 pos) {
 
 #ifndef WIDESCREEN
     // For widescreen we must allow drawing outside the usual area
-    clip_to_bounds(&rectBaseX, &rectBaseY);
+    //clip_to_bounds(&rectBaseX, &rectBaseY);
 #endif
     rectX = rectBaseX;
     rectY = rectBaseY;

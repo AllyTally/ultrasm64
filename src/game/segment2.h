@@ -75,4 +75,10 @@ extern u8 render_hud_power_meter_one_texture_pal_rgba16[];
 
 extern u8 render_hud_power_meter_zero_texture[];
 
+extern u8 render_hud_bar_texture[];
+extern u8 render_hud_bar_texture_pal_rgba16[];
+
+extern u8 render_hud_power_meter_zero_texture[];
+extern u8 render_hud_power_meter_zero_texture_pal_rgba16[];
+
 #endif // SEGMENT2_H

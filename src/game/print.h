@@ -23,10 +23,37 @@
 #define GLYPH_BETA_KEY        55
 #define GLYPH_APOSTROPHE      56
 #define GLYPH_DOUBLE_QUOTE    57
+
+#ifdef VERSION_EU
 #define GLYPH_UMLAUT          58
+#define NUM_ZERO              59
+#define NUM_ONE               60
+#define NUM_TWO               61
+#define NUM_THREE             62
+#define NUM_FOUR              63
+#define NUM_FIVE              64
+#define NUM_SIX               65
+#define NUM_SEVEN             66
+#define NUM_EIGHT             67
+#define NUM_NINE              68
+
+#else
+
+#define NUM_ZERO              58
+#define NUM_ONE               59
+#define NUM_TWO               60
+#define NUM_THREE             61
+#define NUM_FOUR              62
+#define NUM_FIVE              63
+#define NUM_SIX               64
+#define NUM_SEVEN             65
+#define NUM_EIGHT             66
+#define NUM_NINE              67
+#endif
 
 void print_text_fmt_int(s32 x, s32 y, const char *str, s32 n);
 void print_text(s32 x, s32 y, const char *str);
+void print_hud_number(s32 x, s32 y, s32 number);
 void print_text_centered(s32 x, s32 y, const char *str);
 void render_text_labels(void);
 

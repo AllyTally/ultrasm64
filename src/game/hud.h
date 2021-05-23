@@ -22,6 +22,8 @@ enum CameraHUDLut {
 };
 
 void set_hud_camera_status(s16 status);
+void show_hud(void);
+void hide_hud(void);
 void render_hud(void);
 
 #endif // HUD_H

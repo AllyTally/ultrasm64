@@ -21,6 +21,12 @@
  * cannon reticle, and the unused keys.
  **/
 
+f32 gHudLocationOffset = -128.0f;
+f32 gHudLocationTarget = -128.0f;
+u8 gShownHud = FALSE;
+u8 gShownFromCoins = FALSE;
+s16 gShownTimer = 0;
+
 #define POWER_METER_X 320 - 64
 #define POWER_METER_Y 0
 // ------------- FPS COUNTER ---------------
@@ -61,8 +67,8 @@ void print_fps(s32 x, s32 y)
 
 struct PowerMeterHUD {
     s8 animation;
-    s16 x;
-    s16 y;
+    f32 x;
+    f32 y;
     f32 unused;
 };
 
@@ -192,17 +198,17 @@ void render_hud_power_meter_three(s32 x, s32 y, s32 width, s32 height, s32 s, s3
 	gDPTileSync(gDisplayListHead++);
 	gDPSetTile(gDisplayListHead++, 0, 0, 0, 256, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 0, 0, G_TX_WRAP | G_TX_NOMIRROR, 0, 0);
 	gDPLoadSync(gDisplayListHead++);
-	gDPLoadTLUTCmd(gDisplayListHead++, 7, 6);
+	gDPLoadTLUTCmd(gDisplayListHead++, 7, 8);
 	gDPPipeSync(gDisplayListHead++);
 	gDPTileSync(gDisplayListHead++);
-	gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_8b, 32, segmented_to_virtual(render_hud_power_meter_three_texture));
-	gDPSetTile(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_8b, 4, 0, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
+	gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, segmented_to_virtual(render_hud_power_meter_three_texture));
+	gDPSetTile(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_16b, 0, 0, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
 	gDPLoadSync(gDisplayListHead++);
-	gDPLoadTile(gDisplayListHead++, 7, 0, 0, 126, 252);
+	gDPLoadBlock(gDisplayListHead++, 7, 0, 0, 1023, 512);
 	gDPPipeSync(gDisplayListHead++);
 	gDPSetTile(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_4b, 4, 0, 0, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
 	gDPSetTileSize(gDisplayListHead++, 0, 0, 0, 252, 252);
-	gSPTextureRectangle(gDisplayListHead++, xl << 2, yl << 2, xh << 2, yh << 2, 0, s << 5, t << 5,  4096, 1024);
+	gSPScisTextureRectangle(gDisplayListHead++, xl << 2, yl << 2, xh << 2, yh << 2, 0, s << 5, t << 5,  4096, 1024);
 	gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
 	gDPPipeSync(gDisplayListHead++);
 	gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
@@ -210,8 +216,11 @@ void render_hud_power_meter_three(s32 x, s32 y, s32 width, s32 height, s32 s, s3
 	gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
 	gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
 	gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);
-    return;
 }
+
+
+
+
 
 void render_hud_power_meter_two(s32 x, s32 y, s32 width, s32 height, s32 s, s32 t) {
 	s32 xl = MAX(0, x);
@@ -231,17 +240,17 @@ void render_hud_power_meter_two(s32 x, s32 y, s32 width, s32 height, s32 s, s32 
 	gDPTileSync(gDisplayListHead++);
 	gDPSetTile(gDisplayListHead++, 0, 0, 0, 256, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 0, 0, G_TX_WRAP | G_TX_NOMIRROR, 0, 0);
 	gDPLoadSync(gDisplayListHead++);
-	gDPLoadTLUTCmd(gDisplayListHead++, 7, 6);
+	gDPLoadTLUTCmd(gDisplayListHead++, 7, 8);
 	gDPPipeSync(gDisplayListHead++);
 	gDPTileSync(gDisplayListHead++);
-	gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_8b, 32, segmented_to_virtual(render_hud_power_meter_two_texture));
-	gDPSetTile(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_8b, 4, 0, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
+	gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, segmented_to_virtual(render_hud_power_meter_two_texture));
+	gDPSetTile(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_16b, 0, 0, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
 	gDPLoadSync(gDisplayListHead++);
-	gDPLoadTile(gDisplayListHead++, 7, 0, 0, 126, 252);
+	gDPLoadBlock(gDisplayListHead++, 7, 0, 0, 1023, 512);
 	gDPPipeSync(gDisplayListHead++);
 	gDPSetTile(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_4b, 4, 0, 0, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
 	gDPSetTileSize(gDisplayListHead++, 0, 0, 0, 252, 252);
-	gSPTextureRectangle(gDisplayListHead++, xl << 2, yl << 2, xh << 2, yh << 2, 0, s << 5, t << 5,  4096, 1024);
+	gSPScisTextureRectangle(gDisplayListHead++, xl << 2, yl << 2, xh << 2, yh << 2, 0, s << 5, t << 5,  4096, 1024);
 	gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
 	gDPPipeSync(gDisplayListHead++);
 	gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
@@ -250,6 +259,8 @@ void render_hud_power_meter_two(s32 x, s32 y, s32 width, s32 height, s32 s, s32 
 	gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
 	gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);
 }
+
+
 
 void render_hud_power_meter_one(s32 x, s32 y, s32 width, s32 height, s32 s, s32 t) {
 	s32 xl = MAX(0, x);
@@ -269,17 +280,17 @@ void render_hud_power_meter_one(s32 x, s32 y, s32 width, s32 height, s32 s, s32 
 	gDPTileSync(gDisplayListHead++);
 	gDPSetTile(gDisplayListHead++, 0, 0, 0, 256, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 0, 0, G_TX_WRAP | G_TX_NOMIRROR, 0, 0);
 	gDPLoadSync(gDisplayListHead++);
-	gDPLoadTLUTCmd(gDisplayListHead++, 7, 6);
+	gDPLoadTLUTCmd(gDisplayListHead++, 7, 8);
 	gDPPipeSync(gDisplayListHead++);
 	gDPTileSync(gDisplayListHead++);
-	gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_8b, 32, segmented_to_virtual(render_hud_power_meter_one_texture));
-	gDPSetTile(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_8b, 4, 0, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
+	gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, segmented_to_virtual(render_hud_power_meter_one_texture));
+	gDPSetTile(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_16b, 0, 0, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
 	gDPLoadSync(gDisplayListHead++);
-	gDPLoadTile(gDisplayListHead++, 7, 0, 0, 126, 252);
+	gDPLoadBlock(gDisplayListHead++, 7, 0, 0, 1023, 512);
 	gDPPipeSync(gDisplayListHead++);
 	gDPSetTile(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_4b, 4, 0, 0, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
 	gDPSetTileSize(gDisplayListHead++, 0, 0, 0, 252, 252);
-	gSPTextureRectangle(gDisplayListHead++, xl << 2, yl << 2, xh << 2, yh << 2, 0, s << 5, t << 5,  4096, 1024);
+	gSPScisTextureRectangle(gDisplayListHead++, xl << 2, yl << 2, xh << 2, yh << 2, 0, s << 5, t << 5,  4096, 1024);
 	gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
 	gDPPipeSync(gDisplayListHead++);
 	gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
@@ -288,6 +299,8 @@ void render_hud_power_meter_one(s32 x, s32 y, s32 width, s32 height, s32 s, s32 
 	gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
 	gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);
 }
+
+
 void render_hud_power_meter_zero(s32 x, s32 y, s32 width, s32 height, s32 s, s32 t) {
 	s32 xl = MAX(0, x);
 	s32 yl = MAX(0, y);
@@ -301,15 +314,23 @@ void render_hud_power_meter_zero(s32 x, s32 y, s32 width, s32 height, s32 s, s32
 	gDPSetAlphaCompare(gDisplayListHead++, G_AC_THRESHOLD);
 	gDPSetBlendColor(gDisplayListHead++, 255, 255, 255, 255);
 	gDPSetRenderMode(gDisplayListHead++, G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2);
+	gDPSetTextureLUT(gDisplayListHead++, G_TT_RGBA16);
+	gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, segmented_to_virtual(render_hud_power_meter_zero_texture_pal_rgba16));
 	gDPTileSync(gDisplayListHead++);
-	gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_IA, G_IM_SIZ_8b, 32, segmented_to_virtual(render_hud_power_meter_zero_texture));
-	gDPSetTile(gDisplayListHead++, G_IM_FMT_IA, G_IM_SIZ_8b, 4, 0, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
+	gDPSetTile(gDisplayListHead++, 0, 0, 0, 256, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 0, 0, G_TX_WRAP | G_TX_NOMIRROR, 0, 0);
 	gDPLoadSync(gDisplayListHead++);
-	gDPLoadTile(gDisplayListHead++, 7, 0, 0, 126, 252);
+	gDPLoadTLUTCmd(gDisplayListHead++, 7, 3);
 	gDPPipeSync(gDisplayListHead++);
-	gDPSetTile(gDisplayListHead++, G_IM_FMT_IA, G_IM_SIZ_4b, 4, 0, 0, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
+	gDPTileSync(gDisplayListHead++);
+	gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, segmented_to_virtual(render_hud_power_meter_zero_texture));
+	gDPSetTile(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_16b, 0, 0, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
+	gDPLoadSync(gDisplayListHead++);
+	gDPLoadBlock(gDisplayListHead++, 7, 0, 0, 1023, 512);
+	gDPPipeSync(gDisplayListHead++);
+	gDPSetTile(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_4b, 4, 0, 0, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
 	gDPSetTileSize(gDisplayListHead++, 0, 0, 0, 252, 252);
-	gSPTextureRectangle(gDisplayListHead++, xl << 2, yl << 2, xh << 2, yh << 2, 0, s << 5, t << 5,  4096, 1024);
+	gSPScisTextureRectangle(gDisplayListHead++, xl << 2, yl << 2, xh << 2, yh << 2, 0, s << 5, t << 5,  4096, 1024);
+	gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
 	gDPPipeSync(gDisplayListHead++);
 	gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
 	gSPTexture(gDisplayListHead++, 65535, 65535, 0, G_TX_RENDERTILE, G_OFF);
@@ -317,6 +338,10 @@ void render_hud_power_meter_zero(s32 x, s32 y, s32 width, s32 height, s32 s, s32
 	gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
 	gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);
 }
+
+
+
+
 
 /**
  * Power meter animation called when there's less than 8 health segments
@@ -340,18 +365,13 @@ void animate_power_meter_emphasized(void) {
  * Moves power meter y pos speed until it's at 200 to be visible.
  */
 static void animate_power_meter_deemphasizing(void) {
-    s16 xSpeed = (POWER_METER_X - sPowerMeterHUD.x) / 8;
-    s16 ySpeed = (POWER_METER_Y  - sPowerMeterHUD.y) / 8;
+    f32 xSpeed = (POWER_METER_X - sPowerMeterHUD.x) / 8;
+    f32 ySpeed = (POWER_METER_Y  - sPowerMeterHUD.y) / 8;
 
     sPowerMeterHUD.x += xSpeed;
     sPowerMeterHUD.y += ySpeed;
 
-    if ((sPowerMeterHUD.y < POWER_METER_Y) && (ySpeed == 0)) sPowerMeterHUD.y++;
-    if ((sPowerMeterHUD.y > POWER_METER_Y) && (ySpeed == 0)) sPowerMeterHUD.y--;
-    if ((sPowerMeterHUD.x < POWER_METER_X) && (xSpeed == 0)) sPowerMeterHUD.x++;
-    if ((sPowerMeterHUD.x > POWER_METER_X) && (xSpeed == 0)) sPowerMeterHUD.x--;
-
-    if ((sPowerMeterHUD.y == POWER_METER_Y) && (sPowerMeterHUD.x == POWER_METER_X)) {
+    if (((s16) sPowerMeterHUD.y == POWER_METER_Y) && ((s16) sPowerMeterHUD.x == POWER_METER_X)) {
         sPowerMeterHUD.x = POWER_METER_X;
         sPowerMeterHUD.y = POWER_METER_Y;
         sPowerMeterHUD.animation = POWER_METER_VISIBLE;
@@ -363,7 +383,7 @@ static void animate_power_meter_deemphasizing(void) {
  * Moves power meter y pos quickly until it's at 301 to be hidden.
  */
 static void animate_power_meter_hiding(void) {
-    s16 xSpeed = (340 - sPowerMeterHUD.x) / 4;
+    f32 xSpeed = (340 - sPowerMeterHUD.x) / 4;
     sPowerMeterHUD.x += xSpeed;
     if (sPowerMeterHUD.x > 320) {
         sPowerMeterHUD.animation = POWER_METER_HIDDEN;
@@ -389,7 +409,7 @@ void handle_power_meter_actions(s16 numHealthWedges) {
 
     // After health is full, hide power meter
     if (numHealthWedges == 3 && sPowerMeterVisibleTimer > 45.0) {
-        sPowerMeterHUD.animation = POWER_METER_HIDING;
+        if (!gShownHud) sPowerMeterHUD.animation = POWER_METER_HIDING;
     }
 
     // Update to match health value
@@ -400,7 +420,7 @@ void handle_power_meter_actions(s16 numHealthWedges) {
         if (sPowerMeterHUD.animation == POWER_METER_HIDDEN
             || sPowerMeterHUD.animation == POWER_METER_EMPHASIZED) {
             sPowerMeterHUD.animation = POWER_METER_DEEMPHASIZING;
-            sPowerMeterHUD.x = POWER_METER_X;
+            sPowerMeterHUD.x = 320;
             sPowerMeterHUD.y = POWER_METER_Y;
         }
         sPowerMeterVisibleTimer = 0;
@@ -472,13 +492,78 @@ void render_hud_mario_lives(void) {
     //print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(54), HUD_TOP_Y, "%d", gHudDisplay.lives);
 }
 
-/**
- * Renders the amount of coins collected.
- */
-void render_hud_coins(void) {
-    print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(22), HUD_TOP_Y, "+"); // 'Coin' glyph
-    print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(38), HUD_TOP_Y, "*"); // 'X' glyph
-    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(54), HUD_TOP_Y, "%d", gHudDisplay.coins);
+f32 gCoinVelocity = 0;
+f32 gCoinOffset = 0;
+
+void show_hud(void) {
+    if (!gShownHud) {
+        gHudLocationTarget = 0;
+        sPowerMeterHUD.animation = POWER_METER_DEEMPHASIZING;
+        sPowerMeterHUD.x = 320;
+        sPowerMeterHUD.y = POWER_METER_Y;
+        sPowerMeterVisibleTimer = 0;
+        gShownHud = TRUE;
+        gShownFromCoins = FALSE;
+        gShownTimer = 0;
+    } else if (gShownFromCoins) {
+        sPowerMeterHUD.animation = POWER_METER_DEEMPHASIZING;
+        sPowerMeterHUD.x = 320;
+        sPowerMeterHUD.y = POWER_METER_Y;
+        sPowerMeterVisibleTimer = 0;
+        gShownFromCoins = FALSE;
+        gShownTimer = 0;
+    }
+}
+
+void show_left_hud_instant(void) {
+    if (!gShownHud) {
+        gHudLocationTarget = 0;
+        gHudLocationOffset = 0;
+        gShownHud = TRUE;
+        gShownFromCoins = TRUE;
+        gShownTimer = 0;
+    }
+    gCoinVelocity = 2;
+}
+
+void hide_hud(void) {
+    if (gShownHud) {
+        if (gShownFromCoins && (gShownTimer < 90)) return;
+        gHudLocationTarget = -128;
+        if (!gShownFromCoins) sPowerMeterHUD.animation = POWER_METER_HIDING;
+        gShownHud = FALSE;
+    }
+}
+
+void render_hud_info(void) {
+
+    gShownTimer++;
+
+    gCoinVelocity -= 0.5;
+    gCoinOffset += gCoinVelocity;
+    if (gCoinOffset < 0) {
+        gCoinOffset = 0;
+        gCoinVelocity = 0;
+    }
+
+    f32 speed = (gHudLocationTarget - gHudLocationOffset) / 8;
+
+    gHudLocationOffset += speed;
+
+    if ((gHudLocationOffset < gHudLocationTarget) && (speed == 0)) gHudLocationOffset++;
+    if ((gHudLocationOffset > gHudLocationTarget) && (speed == 0)) gHudLocationOffset--;
+
+    // Render the blue bar
+    render_hud_bar((s32)gHudLocationOffset + 9,25,62,10,0,0);
+    // Render the coin and star glyphs
+    print_text((s32)gHudLocationOffset + 9  - 1, 240 - 32 + 15 - 8 , "+"); // Coin
+    print_text((s32)gHudLocationOffset + 55 - 1, 240 - 32 + 16 - 35, "-"); // Star
+
+
+    char buf[10];
+    sprintf(buf, "%03d", gHudDisplay.coins);
+    print_hud_numbers((s32)gHudLocationOffset + 16,240 - 32 + 2 + (s16) gCoinOffset,buf);
+
 }
 
 /*#ifdef VERSION_JP
@@ -612,6 +697,45 @@ void render_hud_camera_status(void) {
  * excluding the cannon reticle which detects a camera preset for it.
  */
 
+void render_hud_bar(s32 x, s32 y, s32 width, s32 height, s32 s, s32 t) {
+	s32 xl = MAX(0, x);
+	s32 yl = MAX(0, y);
+	s32 xh = MAX(0, x + width - 1);
+	s32 yh = MAX(0, y + height - 1);
+	s = (x < 0) ? s - x : s;
+	t = (y < 0) ? t - y : t;
+	gDPPipeSync(gDisplayListHead++);
+	gDPSetCycleType(gDisplayListHead++, G_CYC_COPY);
+	gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+	gDPSetAlphaCompare(gDisplayListHead++, G_AC_THRESHOLD);
+	gDPSetBlendColor(gDisplayListHead++, 255, 255, 255, 255);
+	gDPSetRenderMode(gDisplayListHead++, G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2);
+	gDPSetTextureLUT(gDisplayListHead++, G_TT_RGBA16);
+	gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, segmented_to_virtual(render_hud_bar_texture_pal_rgba16));
+	gDPTileSync(gDisplayListHead++);
+	gDPSetTile(gDisplayListHead++, 0, 0, 0, 256, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 0, 0, G_TX_WRAP | G_TX_NOMIRROR, 0, 0);
+	gDPLoadSync(gDisplayListHead++);
+	gDPLoadTLUTCmd(gDisplayListHead++, 7, 5);
+	gDPPipeSync(gDisplayListHead++);
+	gDPTileSync(gDisplayListHead++);
+	gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_8b, 31, segmented_to_virtual(render_hud_bar_texture));
+	gDPSetTile(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_8b, 4, 0, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 4, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
+	gDPLoadSync(gDisplayListHead++);
+	gDPLoadTile(gDisplayListHead++, 7, 0, 0, 122, 36);
+	gDPPipeSync(gDisplayListHead++);
+	gDPSetTile(gDisplayListHead++, G_IM_FMT_CI, G_IM_SIZ_4b, 4, 0, 0, 0, G_TX_WRAP | G_TX_NOMIRROR, 4, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, 0);
+	gDPSetTileSize(gDisplayListHead++, 0, 0, 0, 244, 36);
+	gSPScisTextureRectangle(gDisplayListHead++, xl << 2, yl << 2, xh << 2, yh << 2, 0, s << 5, t << 5,  4096, 1024);
+	gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
+	gDPPipeSync(gDisplayListHead++);
+	gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+	gSPTexture(gDisplayListHead++, 65535, 65535, 0, G_TX_RENDERTILE, G_OFF);
+	gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
+	gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
+	gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);
+}
+
+
 void render_hud(void) {
     s16 hudDisplayFlags;
 #ifdef VERSION_EU
@@ -649,14 +773,16 @@ void render_hud(void) {
             render_hud_mario_lives();
         }
 
+        render_hud_info();
+
         // always render coins lmao
         //if (hudDisplayFlags & HUD_DISPLAY_FLAG_COIN_COUNT) {
-            render_hud_coins();
+        //    render_hud_coins();
         //}
 
-        if (hudDisplayFlags & HUD_DISPLAY_FLAG_STAR_COUNT) {
-            render_hud_stars();
-        }
+        //if (hudDisplayFlags & HUD_DISPLAY_FLAG_STAR_COUNT) {
+        //    render_hud_stars();
+        //}
 
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_KEYS) {
             render_hud_keys();

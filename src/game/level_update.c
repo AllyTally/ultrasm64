@@ -28,6 +28,7 @@
 #include "level_table.h"
 #include "course_table.h"
 #include "rumble_init.h"
+#include "hud.h"
 
 #define PLAY_MODE_NORMAL 0
 #define PLAY_MODE_PAUSED 2
@@ -913,6 +914,7 @@ void update_hud_values(void) {
 
         if (gHudDisplay.coins != gMarioState->numCoins) {
             if (gGlobalTimer & 0x00000001) {
+                show_left_hud_instant();
                 u32 coinSound;
                 if (gMarioState->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) {
                     coinSound = SOUND_GENERAL_COIN_WATER;
